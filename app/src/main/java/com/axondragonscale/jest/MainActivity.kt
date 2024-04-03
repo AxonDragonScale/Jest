@@ -45,6 +45,8 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun test() = lifecycleScope.launch(Dispatchers.IO) {
+        val jokes = apiClient.getJokes(amount = 2)
+        println(jokes)
         val joke = apiClient.getJoke(category = "Pun")
         println(joke)
     }
