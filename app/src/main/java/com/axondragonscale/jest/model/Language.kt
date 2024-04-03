@@ -9,5 +9,9 @@ enum class Language(val code: String) {
     German("de"),
     Spanish("es"),
     French("fr"),
-    Portuguese("pt")
+    Portuguese("pt");
+
+    companion object {
+        fun fromOrdinal(ordinal: Int) = entries[ordinal]
+    }
 }

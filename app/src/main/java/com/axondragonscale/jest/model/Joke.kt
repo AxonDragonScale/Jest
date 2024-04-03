@@ -13,6 +13,7 @@ sealed interface IJoke {
     val category: String
     val type: String
     val flags: Flags
+    val safe: Boolean
 }
 
 interface ISingleJoke : IJoke {
@@ -29,7 +30,8 @@ data class OnePartJoke(
     override val category: String,
     override val type: String,
     override val flags: Flags,
-    override val joke: String
+    override val joke: String,
+    override val safe: Boolean,
 ): ISingleJoke
 
 interface ITwoPartJoke : IJoke {
@@ -48,5 +50,6 @@ data class TwoPartJoke(
     override val type: String,
     override val flags: Flags,
     override val setup: String,
-    override val delivery: String
+    override val delivery: String,
+    override val safe: Boolean,
 ): ITwoPartJoke

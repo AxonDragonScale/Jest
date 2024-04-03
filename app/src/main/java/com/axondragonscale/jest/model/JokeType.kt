@@ -6,4 +6,8 @@ package com.axondragonscale.jest.model
 enum class JokeType(val type: String) {
     Single("single"),
     TwoPart("twopart");
+
+    companion object {
+        fun fromOrdinal(ordinal: Int) = entries[ordinal]
+    }
 }
