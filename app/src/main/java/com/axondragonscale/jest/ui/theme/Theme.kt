@@ -59,7 +59,7 @@ fun JestTheme(
             window.statusBarColor = colorScheme.primary.toArgb()
             WindowCompat.getInsetsController(window, view).apply {
                 isAppearanceLightStatusBars = darkTheme
-                isAppearanceLightNavigationBars = darkTheme
+                isAppearanceLightNavigationBars = !darkTheme
             }
         }
     }

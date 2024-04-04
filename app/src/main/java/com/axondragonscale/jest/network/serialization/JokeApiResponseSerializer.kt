@@ -1,7 +1,7 @@
 package com.axondragonscale.jest.network.serialization
 
 import com.axondragonscale.jest.network.response.IJokeApiResponse
-import com.axondragonscale.jest.network.response.SingleJokeApiResponse
+import com.axondragonscale.jest.network.response.OnePartJokeApiResponse
 import com.axondragonscale.jest.network.response.TwoPartJokeApiResponse
 import kotlinx.serialization.DeserializationStrategy
 import kotlinx.serialization.json.JsonContentPolymorphicSerializer
@@ -19,7 +19,7 @@ object JokeApiResponseSerializer :
         element: JsonElement
     ): DeserializationStrategy<IJokeApiResponse> =
         when (val type = element.jsonObject.get("type")?.jsonPrimitive?.content) {
-            "single" -> SingleJokeApiResponse.serializer()
+            "single" -> OnePartJokeApiResponse.serializer()
             "twopart" -> TwoPartJokeApiResponse.serializer()
             else -> throw IllegalArgumentException("Type $type is not supported")
         }

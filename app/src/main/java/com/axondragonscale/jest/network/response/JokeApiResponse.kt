@@ -1,8 +1,11 @@
 package com.axondragonscale.jest.network.response
 
+import com.axondragonscale.jest.model.Category
 import com.axondragonscale.jest.model.Flags
-import com.axondragonscale.jest.model.ISingleJoke
+import com.axondragonscale.jest.model.IOnePartJoke
 import com.axondragonscale.jest.model.ITwoPartJoke
+import com.axondragonscale.jest.model.JokeType
+import com.axondragonscale.jest.model.Language
 import com.axondragonscale.jest.network.serialization.JokeApiResponseSerializer
 import kotlinx.serialization.Serializable
 
@@ -16,26 +19,26 @@ sealed interface IJokeApiResponse {
 }
 
 @Serializable
-data class SingleJokeApiResponse(
+data class OnePartJokeApiResponse(
     override val error: Boolean,
     override val id: Int,
-    override val lang: String,
-    override val category: String,
+    override val lang: Language,
+    override val category: Category,
     override val flags: Flags,
     override val safe: Boolean,
-    override val type: String,
+    override val type: JokeType,
     override val joke: String,
-): IJokeApiResponse, ISingleJoke
+): IJokeApiResponse, IOnePartJoke
 
 @Serializable
 data class TwoPartJokeApiResponse(
     override val error: Boolean,
     override val id: Int,
-    override val lang: String,
-    override val category: String,
+    override val lang: Language,
+    override val category: Category,
     override val flags: Flags,
     override val safe: Boolean,
-    override val type: String,
+    override val type: JokeType,
     override val setup: String,
     override val delivery: String,
 ) : IJokeApiResponse, ITwoPartJoke

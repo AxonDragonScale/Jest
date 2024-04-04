@@ -9,14 +9,14 @@ import kotlinx.serialization.Serializable
 @Serializable(with = JokeSerializer::class)
 sealed interface IJoke {
     val id: Int
-    val lang: String
-    val category: String
-    val type: String
+    val lang: Language
+    val category: Category
+    val type: JokeType
     val flags: Flags
     val safe: Boolean
 }
 
-interface ISingleJoke : IJoke {
+interface IOnePartJoke : IJoke {
     val joke: String
 }
 
@@ -26,13 +26,13 @@ interface ISingleJoke : IJoke {
 @Serializable
 data class OnePartJoke(
     override val id: Int,
-    override val lang: String,
-    override val category: String,
-    override val type: String,
+    override val lang: Language,
+    override val category: Category,
+    override val type: JokeType,
     override val flags: Flags,
     override val joke: String,
     override val safe: Boolean,
-): ISingleJoke
+): IOnePartJoke
 
 interface ITwoPartJoke : IJoke {
     val setup: String
@@ -45,9 +45,9 @@ interface ITwoPartJoke : IJoke {
 @Serializable
 data class TwoPartJoke(
     override val id: Int,
-    override val lang: String,
-    override val category: String,
-    override val type: String,
+    override val lang: Language,
+    override val category: Category,
+    override val type: JokeType,
     override val flags: Flags,
     override val setup: String,
     override val delivery: String,

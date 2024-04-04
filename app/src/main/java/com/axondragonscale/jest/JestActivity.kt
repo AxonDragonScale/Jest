@@ -8,6 +8,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
+import com.axondragonscale.jest.model.BlacklistFlag
+import com.axondragonscale.jest.model.Category
 import com.axondragonscale.jest.network.JokeApiClient
 import com.axondragonscale.jest.ui.JestApp
 import com.axondragonscale.jest.ui.theme.JestTheme
@@ -47,8 +49,8 @@ class JestActivity : ComponentActivity() {
     private fun test() = lifecycleScope.launch(Dispatchers.IO) {
 //        val jokes = apiClient.getJokes(amount = 2)
 //        println(jokes)
-//        val joke = apiClient.getJoke(category = "Pun")
-//        println(joke)
+        val joke = apiClient.getJoke(blacklistFlags = setOf(BlacklistFlag.Sexist, BlacklistFlag.NSFW).joinToString(separator = ","))
+        println(joke)
     }
 
 }
