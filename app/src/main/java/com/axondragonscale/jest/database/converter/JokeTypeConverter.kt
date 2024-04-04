@@ -6,7 +6,7 @@ import com.axondragonscale.jest.model.JokeType
 /**
  * Created by Ronak Harkhani on 03/04/24
  */
-object JokeTypeConverted {
+object JokeTypeConverter {
 
     @TypeConverter
     fun toJokeType(ordinal: Int) = JokeType.fromOrdinal(ordinal)

@@ -22,8 +22,9 @@ data class SingleJokeApiResponse(
     override val lang: String,
     override val category: String,
     override val flags: Flags,
+    override val safe: Boolean,
     override val type: String,
-    override val joke: String
+    override val joke: String,
 ): IJokeApiResponse, ISingleJoke
 
 @Serializable
@@ -33,6 +34,7 @@ data class TwoPartJokeApiResponse(
     override val lang: String,
     override val category: String,
     override val flags: Flags,
+    override val safe: Boolean,
     override val type: String,
     override val setup: String,
     override val delivery: String,

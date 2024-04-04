@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class JestActivity : ComponentActivity() {
 
     @Inject lateinit var apiClient: JokeApiClient
 
@@ -45,10 +45,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun test() = lifecycleScope.launch(Dispatchers.IO) {
-        val jokes = apiClient.getJokes(amount = 2)
-        println(jokes)
-        val joke = apiClient.getJoke(category = "Pun")
-        println(joke)
+//        val jokes = apiClient.getJokes(amount = 2)
+//        println(jokes)
+//        val joke = apiClient.getJoke(category = "Pun")
+//        println(joke)
     }
 
 }
