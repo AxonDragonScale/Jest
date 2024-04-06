@@ -71,7 +71,7 @@ fun TypewriterText(
         )
 
         // Text with typewriter effect
-        var displayText by remember { mutableStateOf("") }
+        var displayText by remember(text) { mutableStateOf("") }
         Text(
             modifier = modifier.typewriterEffect(
                 text = if (showText) text else "", // Start typewriter effect when showText is true

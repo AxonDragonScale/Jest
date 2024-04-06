@@ -22,16 +22,21 @@ class HomeVM @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val joke = repository.getRandomJoke()
-            uiState.update {
-                println("zeref - Random Joke")
-                HomeUiState.Success(joke)
-            }
+            getNewJoke()
         }
     }
 
     fun onEvent(event: HomeUiEvent) = viewModelScope.launch {
+        when (event) {
+            is HomeUiEvent.NewJoke -> getNewJoke()
+        }
+    }
 
+    private suspend fun getNewJoke() {
+        val joke = repository.getRandomJoke()
+        uiState.update {
+            HomeUiState.Success(joke)
+        }
     }
 
 }
