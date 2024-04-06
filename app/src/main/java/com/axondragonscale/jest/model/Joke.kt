@@ -16,11 +16,6 @@ sealed interface IJoke {
     val safe: Boolean
 }
 
-fun IJoke.getDisplayText() = when (this) {
-    is OnePartJoke -> this.joke
-    is TwoPartJoke -> this.setup + "\n" + this.delivery
-}
-
 fun IJoke.getFirstLine() = when (this) {
     is OnePartJoke -> this.joke
     is TwoPartJoke -> this.setup

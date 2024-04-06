@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -16,27 +15,21 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Adjust
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.FormatQuote
 import androidx.compose.material.icons.filled.IosShare
 import androidx.compose.material.icons.filled.Shuffle
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,12 +37,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -61,7 +51,10 @@ import com.axondragonscale.jest.model.Language
 import com.axondragonscale.jest.model.OnePartJoke
 import com.axondragonscale.jest.model.getFirstLine
 import com.axondragonscale.jest.model.getSecondLine
+import com.axondragonscale.jest.ui.component.JestIconButton
+import com.axondragonscale.jest.ui.component.JestTag
 import com.axondragonscale.jest.ui.component.TypewriterText
+import com.axondragonscale.jest.ui.theme.JestTheme
 import kotlinx.coroutines.delay
 
 /**
@@ -86,13 +79,13 @@ fun Home(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
     ) {
-        HomeHeader()
+        HomeHeader(modifier = Modifier.padding(top = 32.dp))
 
         Spacer(modifier = Modifier.weight(1f))
 
-        JokeCard(Modifier, uiState)
+        JokeCard(uiState = uiState)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -101,7 +94,7 @@ fun Home(
             onRandomClick = { onEvent(HomeUiEvent.NewJoke) }
         )
 
-        Spacer(modifier = Modifier.weight(1f))
+        Spacer(modifier = Modifier.weight(1.5f))
     }
 }
 
@@ -118,31 +111,6 @@ private fun JokeControls(
         JestIconButton(icon = Icons.Default.Tune, onClick = onTuneClick)
         Spacer(modifier = Modifier.width(16.dp))
         JestIconButton(icon = Icons.Default.Shuffle, onClick = onRandomClick)
-    }
-}
-
-@Composable
-fun JestIconButton(
-    modifier: Modifier = Modifier,
-    icon: ImageVector,
-    onClick: () -> Unit,
-    size: Dp = 56.dp,
-) {
-    // Use Button, IconButton ripple doesn't scale with size
-    Button(
-        modifier = modifier.size(size),
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
-        ),
-        contentPadding = PaddingValues(0.dp)
-    ) {
-        Icon(
-            modifier = Modifier.size(24.dp),
-            imageVector = icon,
-            contentDescription = null
-        )
     }
 }
 
@@ -166,7 +134,7 @@ private fun HomeHeader(modifier: Modifier = Modifier) {
 
 @Composable
 private fun JokeCard(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     uiState: HomeUiState
 ) = Card(
     modifier = modifier,
@@ -196,7 +164,7 @@ private fun JokeCard(
             ShareButton()
             Spacer(modifier = Modifier.weight(1f))
             if (uiState is HomeUiState.Success) {
-                JokeTag(tag = uiState.joke.category.name)
+                JestTag(tag = uiState.joke.category.name)
             }
         }
     }
@@ -234,24 +202,6 @@ private fun JokeText(joke: IJoke) {
             showText = showSecondLine
         )
     }
-}
-
-@Composable
-private fun JokeTag(tag: String) {
-    Text(
-        modifier = Modifier
-            .background(
-                color = MaterialTheme.colorScheme.onPrimary,
-                shape = RoundedCornerShape(8.dp)
-            )
-            .defaultMinSize(minHeight = 24.dp)
-            .padding(horizontal = 12.dp, vertical = 4.dp)
-            .wrapContentHeight(align = Alignment.CenterVertically),
-        text = tag.uppercase(),
-        style = MaterialTheme.typography.labelSmall,
-        fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.primary,
-    )
 }
 
 @Composable
@@ -309,24 +259,27 @@ private fun ClosingQuote(modifier: Modifier = Modifier) {
     )
 }
 
-@Preview
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 fun HomePreview() {
-    MaterialTheme {
-        Home(
-            modifier = Modifier,
-            uiState = HomeUiState.Success(
-                joke = OnePartJoke(
-                    id = 1,
-                    lang = Language.English,
-                    category = Category.Pun,
-                    flags = Flags(false, false, false, false, false, false),
-                    safe = true,
-                    type = JokeType.Single,
-                    joke = "Lorem Ipsum"
-                )
-            ),
-            onEvent = {}
-        )
+    JestTheme {
+        Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+            Home(
+                modifier = Modifier,
+                uiState = HomeUiState.Success(
+                    joke = OnePartJoke(
+                        id = 1,
+                        lang = Language.English,
+                        category = Category.Pun,
+                        flags = Flags(false, false, false, false, false, false),
+                        safe = true,
+                        type = JokeType.Single,
+                        joke = "Lorem Ipsum"
+                    )
+                ),
+                onEvent = {}
+            )
+        }
     }
 }
