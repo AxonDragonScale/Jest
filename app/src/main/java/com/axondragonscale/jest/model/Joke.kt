@@ -16,8 +16,19 @@ sealed interface IJoke {
     val safe: Boolean
 }
 
-interface IOnePartJoke : IJoke {
-    val joke: String
+fun IJoke.getDisplayText() = when (this) {
+    is OnePartJoke -> this.joke
+    is TwoPartJoke -> this.setup + "\n" + this.delivery
+}
+
+fun IJoke.getFirstLine() = when (this) {
+    is OnePartJoke -> this.joke
+    is TwoPartJoke -> this.setup
+}
+
+fun IJoke.getSecondLine() = when (this) {
+    is TwoPartJoke -> this.delivery
+    else -> null
 }
 
 /**
@@ -28,16 +39,11 @@ data class OnePartJoke(
     override val id: Int,
     override val lang: Language,
     override val category: Category,
-    override val type: JokeType,
     override val flags: Flags,
-    override val joke: String,
     override val safe: Boolean,
-): IOnePartJoke
-
-interface ITwoPartJoke : IJoke {
-    val setup: String
-    val delivery: String
-}
+    override val type: JokeType,
+    val joke: String,
+): IJoke
 
 /**
  * Joke where type is `twopart`
@@ -47,9 +53,9 @@ data class TwoPartJoke(
     override val id: Int,
     override val lang: Language,
     override val category: Category,
-    override val type: JokeType,
-    override val flags: Flags,
-    override val setup: String,
-    override val delivery: String,
     override val safe: Boolean,
-): ITwoPartJoke
+    override val flags: Flags,
+    override val type: JokeType,
+    val setup: String,
+    val delivery: String,
+): IJoke

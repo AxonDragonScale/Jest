@@ -1,6 +1,6 @@
 package com.axondragonscale.jest.network
 
-import com.axondragonscale.jest.network.response.IJokeApiResponse
+import com.axondragonscale.jest.network.response.JokeApiResponse
 import com.axondragonscale.jest.network.response.JokeListApiResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -26,6 +26,6 @@ interface JokeApi {
         @Query("lang") lang: String? = null,
         @Query("blacklistFlags") blacklistFlags: String? = null,
         @Query("type") type: String? = null,
-    ): IJokeApiResponse
+    ): JokeApiResponse
 
 }
