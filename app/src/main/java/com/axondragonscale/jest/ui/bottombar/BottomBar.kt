@@ -1,4 +1,4 @@
-package com.axondragonscale.jest.ui
+package com.axondragonscale.jest.ui.bottombar
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
@@ -12,18 +12,12 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -32,38 +26,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.axondragonscale.jest.ui.theme.JestTheme
-
-/**
- * Created by Ronak Harkhani on 06/04/24
- */
-
-sealed class Tab(
-    val name: String,
-    val route: String,
-    val activeIcon: ImageVector,
-    val inactiveIcon: ImageVector,
-) {
-
-    data object Home : Tab(
-        name = "HOME",
-        route = "",
-        activeIcon = Icons.Filled.Home,
-        inactiveIcon = Icons.Outlined.Home,
-    )
-
-    data object Favorites : Tab(
-        name = "FAVORITES",
-        route = "",
-        activeIcon = Icons.Filled.Favorite,
-        inactiveIcon = Icons.Outlined.FavoriteBorder,
-    )
-
-}
 
 @Composable
 fun BottomTabBar(
@@ -143,7 +109,7 @@ fun BottomTabBar(
 fun BottomBarPreview(modifier: Modifier = Modifier) {
     JestTheme {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.BottomCenter
         ) {
             BottomTabBar(

@@ -13,7 +13,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.axondragonscale.jest.ui.home.Home
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
+import com.axondragonscale.jest.ui.bottombar.BottomTabBar
+import com.axondragonscale.jest.ui.bottombar.Tab
+import com.axondragonscale.jest.ui.favorites.favoritesNavGraph
+import com.axondragonscale.jest.ui.home.homeNavGraph
 
 /**
  * Created by Ronak Harkhani on 01/04/24
@@ -26,7 +31,14 @@ fun JestApp() {
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        Home()
+        val navController = rememberNavController()
+        NavHost(
+            navController = navController,
+            startDestination = Route.Home.route
+        ) {
+            homeNavGraph(navController)
+            favoritesNavGraph(navController)
+        }
 
         var activeTab by remember { mutableStateOf<Tab>(Tab.Home) }
         BottomTabBar(

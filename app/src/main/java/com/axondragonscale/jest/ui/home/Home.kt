@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.axondragonscale.jest.model.Category
 import com.axondragonscale.jest.model.Flags
 import com.axondragonscale.jest.model.IJoke
@@ -62,7 +63,7 @@ import kotlinx.coroutines.delay
  */
 
 @Composable
-fun Home(vm: HomeVM = hiltViewModel()) {
+fun Home(navController: NavController, vm: HomeVM = hiltViewModel()) {
     val uiState by vm.uiState.collectAsStateWithLifecycle()
     Home(
         uiState = uiState,
