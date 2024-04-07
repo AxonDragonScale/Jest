@@ -47,7 +47,10 @@ fun JestApp() {
                 .align(Alignment.BottomCenter),
             tabs = listOf(Tab.Home, Tab.Favorites),
             activeTab = activeTab,
-            onTabChange = { activeTab = it }
+            onTabChange = {
+                navController.navigate(it.route.route)
+                activeTab = it
+            }
         )
     }
 }

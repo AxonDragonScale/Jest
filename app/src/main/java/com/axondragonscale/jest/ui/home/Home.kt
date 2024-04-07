@@ -263,7 +263,7 @@ private fun ClosingQuote(modifier: Modifier = Modifier) {
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun HomePreview() {
+private fun HomePreview() {
     JestTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
             Home(
