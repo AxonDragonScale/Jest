@@ -63,7 +63,7 @@ import kotlinx.coroutines.delay
  */
 
 @Composable
-fun Home(navController: NavController, vm: HomeVM = hiltViewModel()) {
+fun Home(vm: HomeVM = hiltViewModel()) {
     val uiState by vm.uiState.collectAsStateWithLifecycle()
     Home(
         uiState = uiState,

@@ -22,7 +22,7 @@ import com.axondragonscale.jest.ui.theme.JestTheme
  */
 
 @Composable
-fun Favorites(navController: NavController, vm: FavoritesVM = hiltViewModel()) {
+fun Favorites(vm: FavoritesVM = hiltViewModel()) {
     val uiState by vm.uiState.collectAsStateWithLifecycle()
     Favorites(uiState = uiState)
 }

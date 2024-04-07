@@ -6,7 +6,6 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.axondragonscale.jest.ui.Route
 
 /**
  * Created by Ronak Harkhani on 06/04/24
@@ -14,21 +13,25 @@ import com.axondragonscale.jest.ui.Route
 
 sealed class Tab(
     val name: String,
-    val route: Route,
+    val position: Int,
     val activeIcon: ImageVector,
     val inactiveIcon: ImageVector,
 ) {
 
+    companion object {
+        val all = listOf(Home, Favorites)
+    }
+
     data object Home : Tab(
         name = "HOME",
-        route = Route.Home,
+        position = 0,
         activeIcon = Icons.Filled.Home,
         inactiveIcon = Icons.Outlined.Home,
     )
 
     data object Favorites : Tab(
         name = "FAVORITES",
-        route = Route.Favorites,
+        position = 1,
         activeIcon = Icons.Filled.Favorite,
         inactiveIcon = Icons.Outlined.FavoriteBorder,
     )
