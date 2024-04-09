@@ -43,7 +43,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavController
 import com.axondragonscale.jest.model.Category
 import com.axondragonscale.jest.model.Flags
 import com.axondragonscale.jest.model.IJoke
@@ -56,6 +55,7 @@ import com.axondragonscale.jest.ui.component.JestIconButton
 import com.axondragonscale.jest.ui.component.JestTag
 import com.axondragonscale.jest.ui.component.TypewriterText
 import com.axondragonscale.jest.ui.theme.JestTheme
+import com.axondragonscale.jest.ui.tune.TuneBottomSheet
 import kotlinx.coroutines.delay
 
 /**
@@ -90,10 +90,14 @@ fun Home(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        var isTuneBottomSheetOpen by remember { mutableStateOf(false) }
         JokeControls(
-            onTuneClick = {},
+            onTuneClick = { isTuneBottomSheetOpen = true },
             onRandomClick = { onEvent(HomeUiEvent.NewJoke) }
         )
+
+        if (isTuneBottomSheetOpen)
+            TuneBottomSheet(onDismiss = { isTuneBottomSheetOpen = false })
 
         Spacer(modifier = Modifier.weight(1.5f))
     }

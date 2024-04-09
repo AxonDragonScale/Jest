@@ -7,7 +7,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 enum class Category {
-    Any,            // Category will be Any only for a request. Never for a Joke.
     Programming,
     Misc,
     Dark,
