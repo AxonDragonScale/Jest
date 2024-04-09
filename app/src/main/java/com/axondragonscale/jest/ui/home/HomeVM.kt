@@ -2,6 +2,8 @@ package com.axondragonscale.jest.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.axondragonscale.jest.model.IJoke
+import com.axondragonscale.jest.repository.AppPrefsRepository
 import com.axondragonscale.jest.repository.JokeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,27 +18,37 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeVM @Inject constructor(
     private val repository: JokeRepository,
-): ViewModel() {
+    private val appPrefsRepository: AppPrefsRepository,
+) : ViewModel() {
 
     val uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            getNewJoke()
+            val joke = getCurrentJoke()
+            uiState.update { HomeUiState.Success(joke) }
         }
     }
 
-    fun onEvent(event: HomeUiEvent) = viewModelScope.launch {
+    fun onEvent(event: HomeUiEvent) = viewModelScope.launch(Dispatchers.IO) {
         when (event) {
-            is HomeUiEvent.NewJoke -> getNewJoke()
+            is HomeUiEvent.NewJoke -> {
+                uiState.update { HomeUiState.Loading }
+                val joke = getNewJoke()
+                uiState.update { HomeUiState.Success(joke) }
+            }
         }
     }
 
-    private suspend fun getNewJoke() {
+    private suspend fun getCurrentJoke() =
+        appPrefsRepository.getCurrentJoke() ?: getNewJoke()
+
+    private suspend fun getNewJoke(): IJoke {
         val joke = repository.getRandomJoke()
-        uiState.update {
-            HomeUiState.Success(joke)
+        viewModelScope.launch(Dispatchers.IO) {
+            appPrefsRepository.setCurrentJoke(joke)
         }
+        return joke
     }
 
 }

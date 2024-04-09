@@ -7,16 +7,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import com.axondragonscale.jest.network.JokeApiClient
 import com.axondragonscale.jest.ui.JestApp
 import com.axondragonscale.jest.ui.theme.JestTheme
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class JestActivity : ComponentActivity() {
-
-    @Inject lateinit var apiClient: JokeApiClient
 
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) {}
