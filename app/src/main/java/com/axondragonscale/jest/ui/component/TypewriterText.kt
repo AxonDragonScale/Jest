@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,11 +25,18 @@ import androidx.compose.ui.unit.TextUnit
  * Created by Ronak Harkhani on 06/04/24
  */
 
+enum class TypewriterTextVisibility {
+    Gone,
+    Invisible,
+    Static,
+    Animate,
+}
+
 @Composable
 fun TypewriterText(
     text: String,
     modifier: Modifier = Modifier,
-    showText: Boolean = true,
+    visibility: TypewriterTextVisibility = TypewriterTextVisibility.Animate,
     onEffectComplete: (suspend () -> Unit)? = null,
     color: Color = Color.Unspecified,
     fontSize: TextUnit = TextUnit.Unspecified,
@@ -49,51 +55,57 @@ fun TypewriterText(
     style: TextStyle = LocalTextStyle.current
 ) {
     Box {
-        // Text with 0 alpha to reserve space for the full text
-        Text(
-            modifier = modifier.alpha(0f),
-            text = text,
-            color = color,
-            fontSize = fontSize,
-            fontStyle = fontStyle,
-            fontWeight = fontWeight,
-            fontFamily = fontFamily,
-            letterSpacing = letterSpacing,
-            textDecoration = textDecoration,
-            textAlign = textAlign,
-            lineHeight = lineHeight,
-            overflow = overflow,
-            softWrap = softWrap,
-            maxLines = maxLines,
-            minLines = minLines,
-            onTextLayout = onTextLayout,
-            style = style,
-        )
+        // Reserve space for the full text
+        if (visibility != TypewriterTextVisibility.Gone) {
+            // Show text if visibility is static, otherwise reserve space
+            val alpha = if (visibility == TypewriterTextVisibility.Static) 1f else 0f
+            Text(
+                modifier = modifier.alpha(alpha),
+                text = text,
+                color = color,
+                fontSize = fontSize,
+                fontStyle = fontStyle,
+                fontWeight = fontWeight,
+                fontFamily = fontFamily,
+                letterSpacing = letterSpacing,
+                textDecoration = textDecoration,
+                textAlign = textAlign,
+                lineHeight = lineHeight,
+                overflow = overflow,
+                softWrap = softWrap,
+                maxLines = maxLines,
+                minLines = minLines,
+                onTextLayout = onTextLayout,
+                style = style,
+            )
+        }
 
-        // Text with typewriter effect
-        var displayText by remember(text) { mutableStateOf("") }
-        Text(
-            modifier = modifier.typewriterEffect(
-                text = if (showText) text else "", // Start typewriter effect when showText is true
-                onTextUpdate = { displayText = it },
-                onEffectComplete = onEffectComplete,
-            ),
-            text = displayText,
-            color = color,
-            fontSize = fontSize,
-            fontStyle = fontStyle,
-            fontWeight = fontWeight,
-            fontFamily = fontFamily,
-            letterSpacing = letterSpacing,
-            textDecoration = textDecoration,
-            textAlign = textAlign,
-            lineHeight = lineHeight,
-            overflow = overflow,
-            softWrap = softWrap,
-            maxLines = maxLines,
-            minLines = minLines,
-            onTextLayout = onTextLayout,
-            style = style,
-        )
+        if (visibility == TypewriterTextVisibility.Animate) {
+            // Text with typewriter effect
+            var displayText by remember(text) { mutableStateOf("") }
+            Text(
+                modifier = modifier.typewriterEffect(
+                    text = text, // Start typewriter effect when showText is true
+                    onTextUpdate = { displayText = it },
+                    onEffectComplete = onEffectComplete,
+                ),
+                text = displayText,
+                color = color,
+                fontSize = fontSize,
+                fontStyle = fontStyle,
+                fontWeight = fontWeight,
+                fontFamily = fontFamily,
+                letterSpacing = letterSpacing,
+                textDecoration = textDecoration,
+                textAlign = textAlign,
+                lineHeight = lineHeight,
+                overflow = overflow,
+                softWrap = softWrap,
+                maxLines = maxLines,
+                minLines = minLines,
+                onTextLayout = onTextLayout,
+                style = style,
+            )
+        }
     }
 }

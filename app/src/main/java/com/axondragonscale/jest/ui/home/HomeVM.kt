@@ -32,6 +32,14 @@ class HomeVM @Inject constructor(
 
     fun onEvent(event: HomeUiEvent) = viewModelScope.launch(Dispatchers.IO) {
         when (event) {
+            is HomeUiEvent.JokeAnimationComplete -> {
+                uiState.update {
+                    if (it is HomeUiState.Success) it.copy(shouldAnimateJoke = false)
+                    else it
+                }
+            }
+
+
             is HomeUiEvent.NewJoke -> {
                 uiState.update { HomeUiState.Loading }
                 val joke = getNewJoke()
