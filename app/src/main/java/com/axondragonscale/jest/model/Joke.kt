@@ -14,6 +14,7 @@ sealed interface IJoke {
     val type: JokeType
     val flags: Flags
     val safe: Boolean
+    var favorite: Boolean
 }
 
 fun IJoke.getFirstLine() = when (this) {
@@ -36,6 +37,7 @@ data class OnePartJoke(
     override val category: Category,
     override val flags: Flags,
     override val safe: Boolean,
+    override var favorite: Boolean = false,
     override val type: JokeType,
     val joke: String,
 ): IJoke
@@ -50,6 +52,7 @@ data class TwoPartJoke(
     override val category: Category,
     override val safe: Boolean,
     override val flags: Flags,
+    override var favorite: Boolean = false,
     override val type: JokeType,
     val setup: String,
     val delivery: String,

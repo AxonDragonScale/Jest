@@ -1,5 +1,7 @@
 package com.axondragonscale.jest.repository
 
+import com.axondragonscale.jest.database.JestDatabaseClient
+import com.axondragonscale.jest.database.mapper.toEntity
 import com.axondragonscale.jest.model.IJoke
 import com.axondragonscale.jest.network.JokeApiClient
 import com.axondragonscale.jest.network.mapper.toModel
@@ -11,9 +13,19 @@ import javax.inject.Singleton
  */
 @Singleton
 class JokeRepository @Inject constructor(
-    private val apiClient: JokeApiClient
+    private val apiClient: JokeApiClient,
+    private val dbClient: JestDatabaseClient,
 ) {
 
-    suspend fun getRandomJoke(): IJoke = apiClient.getJoke().toModel()
+    suspend fun getNewJoke(): IJoke {
+        return apiClient.getJoke().toModel()
+    }
 
+    suspend fun addToFavorites(joke: IJoke) {
+        dbClient.insertJoke(joke.toEntity())
+    }
+
+    suspend fun removeFromFavorites(joke: IJoke) {
+        dbClient.deleteJoke(joke.id)
+    }
 }

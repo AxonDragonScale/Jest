@@ -66,11 +66,19 @@ fun Home(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        JokeCard(
-            joke = (uiState as? HomeUiState.Success)?.joke,
-            shouldAnimateJoke = (uiState as? HomeUiState.Success)?.shouldAnimateJoke ?: false,
-            onAnimationComplete = { onEvent(HomeUiEvent.JokeAnimationComplete) }
-        )
+        (uiState as? HomeUiState.Success).let { uiState ->
+            JokeCard(
+                joke = uiState?.joke,
+                shouldAnimateJoke = uiState?.shouldAnimateJoke ?: false,
+                onAnimationComplete = { onEvent(HomeUiEvent.JokeAnimationComplete) },
+                onFavoriteToggled = {
+                    uiState?.joke?.let { joke ->
+                        onEvent(HomeUiEvent.FavoriteToggled(joke, it))
+                    }
+                },
+                onShareClick = { },
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 

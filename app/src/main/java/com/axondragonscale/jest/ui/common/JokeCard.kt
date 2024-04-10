@@ -21,7 +21,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,8 +47,6 @@ import com.axondragonscale.jest.model.getSecondLine
 import com.axondragonscale.jest.ui.component.JestTag
 import com.axondragonscale.jest.ui.component.TypewriterText
 import com.axondragonscale.jest.ui.component.TypewriterTextVisibility
-import com.axondragonscale.jest.ui.home.Home
-import com.axondragonscale.jest.ui.home.HomeUiState
 import com.axondragonscale.jest.ui.theme.JestTheme
 import kotlinx.coroutines.delay
 
@@ -61,6 +61,8 @@ fun JokeCard(
     joke: IJoke?,
     shouldAnimateJoke: Boolean,
     onAnimationComplete: () -> Unit,
+    onFavoriteToggled: (Boolean) -> Unit,
+    onShareClick: () -> Unit,
 ) = Card(
     modifier = modifier,
     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
@@ -91,7 +93,10 @@ fun JokeCard(
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            FavoriteButton()
+            FavoriteButton(
+                isFavorite = joke?.favorite ?: false,
+                onFavoriteToggled = onFavoriteToggled
+            )
             ShareButton()
             Spacer(modifier = Modifier.weight(1f))
             if (joke != null) {
@@ -149,18 +154,22 @@ private fun JokeText(
 }
 
 @Composable
-private fun FavoriteButton(modifier: Modifier = Modifier) {
-    val checked = false
+private fun FavoriteButton(
+    modifier: Modifier = Modifier,
+    isFavorite: Boolean,
+    onFavoriteToggled: (Boolean) -> Unit,
+) {
     IconToggleButton(
         modifier = modifier,
-        checked = false,
-        onCheckedChange = {}
+        checked = isFavorite,
+        onCheckedChange = onFavoriteToggled,
+        colors = IconButtonDefaults.iconToggleButtonColors(
+            checkedContentColor = LocalContentColor.current
+        ),
     ) {
         Icon(
-            imageVector =
-            if (checked) Icons.Default.Favorite
-            else Icons.Default.FavoriteBorder,
-            contentDescription = null
+            imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
+            contentDescription = null,
         )
     }
 }
@@ -216,11 +225,14 @@ private fun JokeCardPreview() {
                     category = Category.Pun,
                     flags = Flags(false, false, false, false, false, false),
                     safe = true,
+                    favorite = false,
                     type = JokeType.Single,
                     joke = "Lorem Ipsum"
                 ),
                 shouldAnimateJoke = true,
-                onAnimationComplete = {}
+                onAnimationComplete = {},
+                onFavoriteToggled = {},
+                onShareClick = {},
             )
         }
     }

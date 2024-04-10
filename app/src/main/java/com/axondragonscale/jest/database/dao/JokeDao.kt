@@ -18,6 +18,9 @@ interface JokeDao {
     @Query("SELECT * FROM joke")
     suspend fun getJokes(): List<JokeEntity>
 
+    @Query("DELETE FROM joke WHERE id = :id")
+    suspend fun deleteJoke(id: Int)
+
     @Delete
     suspend fun deleteJoke(joke: JokeEntity)
 

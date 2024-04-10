@@ -22,6 +22,7 @@ data class JokeEntity(
     val type: JokeType,
     @Embedded val flags: Flags,
     val safe: Boolean,
+    val favorite: Boolean,
     val joke: String?,
     val setup: String?,
     val delivery: String?

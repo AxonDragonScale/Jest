@@ -3,6 +3,8 @@ package com.axondragonscale.jest.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.axondragonscale.jest.model.IJoke
+import com.axondragonscale.jest.model.OnePartJoke
+import com.axondragonscale.jest.model.TwoPartJoke
 import com.axondragonscale.jest.repository.AppPrefsRepository
 import com.axondragonscale.jest.repository.JokeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,6 +47,25 @@ class HomeVM @Inject constructor(
                 val joke = getNewJoke()
                 uiState.update { HomeUiState.Success(joke) }
             }
+
+            is HomeUiEvent.FavoriteToggled -> {
+                val updatedJoke = when (val joke = event.joke) {
+                    is OnePartJoke -> joke.copy(favorite = event.favorite)
+                    is TwoPartJoke -> joke.copy(favorite = event.favorite)
+                }
+                launch {
+                    appPrefsRepository.setCurrentJoke(updatedJoke)
+                    if (event.favorite) {
+                        repository.addToFavorites(updatedJoke)
+                    } else {
+                        repository.removeFromFavorites(event.joke)
+                    }
+                }
+                uiState.update {
+                    if (it is HomeUiState.Success) it.copy(joke = updatedJoke)
+                    else it
+                }
+            }
         }
     }
 
@@ -52,7 +73,7 @@ class HomeVM @Inject constructor(
         appPrefsRepository.getCurrentJoke() ?: getNewJoke()
 
     private suspend fun getNewJoke(): IJoke {
-        val joke = repository.getRandomJoke()
+        val joke = repository.getNewJoke()
         viewModelScope.launch(Dispatchers.IO) {
             appPrefsRepository.setCurrentJoke(joke)
         }
