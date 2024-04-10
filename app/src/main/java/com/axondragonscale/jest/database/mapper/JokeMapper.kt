@@ -36,6 +36,7 @@ fun JokeEntity.toModel(): IJoke = when (type) {
 
 fun IJoke.toEntity(): JokeEntity = JokeEntity(
     id = id,
+    timestamp = System.currentTimeMillis(),
     lang = lang,
     category = category,
     flags = flags,

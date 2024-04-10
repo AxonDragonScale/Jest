@@ -2,6 +2,8 @@ package com.axondragonscale.jest.database.entity
 
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Index
+import androidx.room.Index.Order
 import androidx.room.PrimaryKey
 import com.axondragonscale.jest.model.Category
 import com.axondragonscale.jest.model.Flags
@@ -13,10 +15,14 @@ import com.axondragonscale.jest.model.Language
  */
 @Entity(
     tableName = "joke",
-    indices = [],
+    indices = [
+        Index("timestamp", unique = true, orders = [Order.DESC]),
+        Index("favorite")
+    ],
 )
 data class JokeEntity(
     @PrimaryKey val id: Int,
+    val timestamp: Long,
     val lang: Language,
     val category: Category,
     val type: JokeType,
@@ -25,5 +31,5 @@ data class JokeEntity(
     val favorite: Boolean,
     val joke: String?,
     val setup: String?,
-    val delivery: String?
+    val delivery: String?,
 )

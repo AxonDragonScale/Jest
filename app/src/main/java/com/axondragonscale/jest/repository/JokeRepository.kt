@@ -1,10 +1,11 @@
 package com.axondragonscale.jest.repository
 
 import com.axondragonscale.jest.database.JestDatabaseClient
-import com.axondragonscale.jest.database.mapper.toEntity
+import com.axondragonscale.jest.database.entity.JokeEntity
+import com.axondragonscale.jest.database.mapper.toModel
 import com.axondragonscale.jest.model.IJoke
 import com.axondragonscale.jest.network.JokeApiClient
-import com.axondragonscale.jest.network.mapper.toModel
+import com.axondragonscale.jest.network.mapper.toEntity
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,15 +18,24 @@ class JokeRepository @Inject constructor(
     private val dbClient: JestDatabaseClient,
 ) {
 
+    suspend fun getCurrentJoke(): IJoke {
+        return dbClient.getCurrentJoke()?.toModel() ?: getNewJoke()
+    }
+
     suspend fun getNewJoke(): IJoke {
-        return apiClient.getJoke().toModel()
+        var joke: JokeEntity
+        do {
+            joke = apiClient.getJoke().toEntity()
+            val inserted = dbClient.insertJoke(joke)
+        } while (inserted == -1L)
+        return joke.toModel()
     }
 
-    suspend fun addToFavorites(joke: IJoke) {
-        dbClient.insertJoke(joke.toEntity())
+    suspend fun addToFavorites(jokeId: Int) {
+        dbClient.updateFavoriteFlag(jokeId, favorite = true)
     }
 
-    suspend fun removeFromFavorites(joke: IJoke) {
-        dbClient.deleteJoke(joke.id)
+    suspend fun removeFromFavorites(jokeId: Int) {
+        dbClient.updateFavoriteFlag(jokeId, favorite = false)
     }
 }

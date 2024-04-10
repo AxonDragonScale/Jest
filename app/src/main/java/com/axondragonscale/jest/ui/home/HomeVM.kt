@@ -2,7 +2,6 @@ package com.axondragonscale.jest.ui.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.axondragonscale.jest.model.IJoke
 import com.axondragonscale.jest.model.OnePartJoke
 import com.axondragonscale.jest.model.TwoPartJoke
 import com.axondragonscale.jest.repository.AppPrefsRepository
@@ -27,7 +26,7 @@ class HomeVM @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            val joke = getCurrentJoke()
+            val joke = repository.getCurrentJoke()
             uiState.update { HomeUiState.Success(joke) }
         }
     }
@@ -44,7 +43,7 @@ class HomeVM @Inject constructor(
 
             is HomeUiEvent.NewJoke -> {
                 uiState.update { HomeUiState.Loading }
-                val joke = getNewJoke()
+                val joke = repository.getNewJoke()
                 uiState.update { HomeUiState.Success(joke) }
             }
 
@@ -54,12 +53,8 @@ class HomeVM @Inject constructor(
                     is TwoPartJoke -> joke.copy(favorite = event.favorite)
                 }
                 launch {
-                    appPrefsRepository.setCurrentJoke(updatedJoke)
-                    if (event.favorite) {
-                        repository.addToFavorites(updatedJoke)
-                    } else {
-                        repository.removeFromFavorites(event.joke)
-                    }
+                    if (event.favorite) repository.addToFavorites(updatedJoke.id)
+                    else repository.removeFromFavorites(updatedJoke.id)
                 }
                 uiState.update {
                     if (it is HomeUiState.Success) it.copy(joke = updatedJoke)
@@ -67,17 +62,6 @@ class HomeVM @Inject constructor(
                 }
             }
         }
-    }
-
-    private suspend fun getCurrentJoke() =
-        appPrefsRepository.getCurrentJoke() ?: getNewJoke()
-
-    private suspend fun getNewJoke(): IJoke {
-        val joke = repository.getNewJoke()
-        viewModelScope.launch(Dispatchers.IO) {
-            appPrefsRepository.setCurrentJoke(joke)
-        }
-        return joke
     }
 
 }
