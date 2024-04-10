@@ -1,6 +1,8 @@
 package com.axondragonscale.jest.ui.bottombar
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Article
+import androidx.compose.material.icons.automirrored.outlined.Article
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -19,7 +21,7 @@ sealed class Tab(
 ) {
 
     companion object {
-        val all = listOf(Home, Favorites)
+        val all = listOf(Home, Favorites, History)
     }
 
     data object Home : Tab(
@@ -34,6 +36,13 @@ sealed class Tab(
         position = 1,
         activeIcon = Icons.Filled.Favorite,
         inactiveIcon = Icons.Outlined.FavoriteBorder,
+    )
+
+    data object History : Tab(
+        name = "HISTORY",
+        position = 2,
+        activeIcon = Icons.AutoMirrored.Filled.Article,
+        inactiveIcon = Icons.AutoMirrored.Outlined.Article,
     )
 
 }

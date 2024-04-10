@@ -96,9 +96,9 @@ fun JokeCard(
         ) {
             FavoriteButton(
                 isFavorite = joke?.favorite ?: false,
-                onFavoriteToggled = onFavoriteToggled
+                onFavoriteToggled = onFavoriteToggled,
             )
-            ShareButton()
+            ShareButton(onShareClick = onShareClick)
             Spacer(modifier = Modifier.weight(1f))
             if (joke != null) {
                 JestTag(tag = joke.category.name)
@@ -176,10 +176,13 @@ private fun FavoriteButton(
 }
 
 @Composable
-private fun ShareButton(modifier: Modifier = Modifier) {
+private fun ShareButton(
+    modifier: Modifier = Modifier,
+    onShareClick: () -> Unit,
+) {
     IconButton(
         modifier = modifier,
-        onClick = { /*TODO*/ }
+        onClick = onShareClick,
     ) {
         Icon(
             imageVector = Icons.Default.IosShare,

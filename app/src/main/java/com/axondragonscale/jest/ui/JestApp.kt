@@ -38,6 +38,7 @@ fun JestApp() {
             when (position) {
                 Tab.Home.position -> Home()
                 Tab.Favorites.position -> Favorites()
+                Tab.History.position -> Favorites()
             }
         }
 

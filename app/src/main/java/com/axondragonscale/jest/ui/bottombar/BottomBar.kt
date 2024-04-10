@@ -52,7 +52,7 @@ fun BottomTabBar(
         tabs.forEach { tab ->
             val isActive = tab == activeTab
             val interactionSource = remember { MutableInteractionSource() }
-            val weight by animateFloatAsState(targetValue = if (isActive) 2f else 1f)
+            val weight by animateFloatAsState(targetValue = if (isActive) 3f else 1f)
             val contentColor by animateColorAsState(
                 if (isActive) MaterialTheme.colorScheme.onPrimary
                 else MaterialTheme.colorScheme.onPrimaryContainer
@@ -115,7 +115,7 @@ fun BottomBarPreview(modifier: Modifier = Modifier) {
             BottomTabBar(
                 modifier = Modifier.padding(horizontal = 56.dp, vertical = 16.dp),
                 activeTab = Tab.Home,
-                tabs = listOf(Tab.Home, Tab.Favorites),
+                tabs = listOf(Tab.Home, Tab.Favorites, Tab.History),
                 onTabChange = { }
             )
         }
