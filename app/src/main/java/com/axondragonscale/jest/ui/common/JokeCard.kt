@@ -77,7 +77,8 @@ fun JokeCard(
 
         if (joke != null) {
             JokeText(
-                joke = joke,
+                firstLine = joke.getFirstLine(),
+                secondLine = joke.getSecondLine(),
                 isTextAnimated = shouldAnimateJoke,
                 onAnimationComplete = onAnimationComplete,
             )
@@ -111,11 +112,12 @@ fun JokeCard(
 
 @Composable
 private fun JokeText(
-    joke: IJoke,
+    firstLine: String,
+    secondLine: String?,
     isTextAnimated: Boolean,
     onAnimationComplete: () -> Unit,
 ) {
-    var secondLineVisibility by remember(joke) {
+    var secondLineVisibility by remember(secondLine) {
         mutableStateOf(
             if (isTextAnimated) TypewriterTextVisibility.Invisible
             else TypewriterTextVisibility.Static
@@ -126,7 +128,7 @@ private fun JokeText(
             .padding(horizontal = 8.dp)
             .fillMaxWidth()
             .defaultMinSize(minHeight = 28.dp),
-        text = joke.getFirstLine(),
+        text = firstLine,
         style = MaterialTheme.typography.titleLarge,
         fontWeight = FontWeight.Bold,
         visibility = if (isTextAnimated) TypewriterTextVisibility.Animate else TypewriterTextVisibility.Static,
@@ -136,7 +138,6 @@ private fun JokeText(
         }
     )
 
-    val secondLine by remember(joke) { mutableStateOf(joke.getSecondLine()) }
     secondLine?.let {
         TypewriterText(
             modifier = Modifier
