@@ -7,11 +7,16 @@ import kotlinx.serialization.Serializable
  * Created by Ronak Harkhani on 03/04/24
  */
 @Serializable
-enum class BlacklistFlag(val flag: String) {
-    @SerialName("nsfw") NSFW("nsfw"),
-    @SerialName("religious") Religious("religious"),
-    @SerialName("political") Political("political"),
-    @SerialName("racist") Racist("racist"),
-    @SerialName("sexist") Sexist("sexist"),
-    @SerialName("explicit") Explicit("explicit");
+enum class BlacklistFlag {
+    @SerialName("nsfw") NSFW,
+    @SerialName("religious") Religious,
+    @SerialName("political") Political,
+    @SerialName("racist") Racist,
+    @SerialName("sexist") Sexist,
+    @SerialName("explicit") Explicit;
+
+    companion object {
+        fun fromOrdinal(ordinal: Int) = BlacklistFlag.entries[ordinal]
+    }
+
 }

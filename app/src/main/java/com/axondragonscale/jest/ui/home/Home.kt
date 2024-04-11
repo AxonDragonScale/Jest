@@ -36,7 +36,7 @@ import com.axondragonscale.jest.model.OnePartJoke
 import com.axondragonscale.jest.ui.common.JokeCard
 import com.axondragonscale.jest.ui.component.JestIconButton
 import com.axondragonscale.jest.ui.theme.JestTheme
-import com.axondragonscale.jest.ui.tune.TuneBottomSheet
+import com.axondragonscale.jest.ui.tune.PrefsBottomSheet
 
 /**
  * Created by Ronak Harkhani on 01/04/24
@@ -89,7 +89,7 @@ fun Home(
         )
 
         if (isTuneBottomSheetOpen)
-            TuneBottomSheet(onDismiss = { isTuneBottomSheetOpen = false })
+            PrefsBottomSheet(onDismiss = { isTuneBottomSheetOpen = false })
 
         Spacer(modifier = Modifier.weight(1.5f))
     }

@@ -23,11 +23,12 @@ class JokeRepository @Inject constructor(
     }
 
     suspend fun getNewJoke(): IJoke {
+        var retryCount = 5
         var joke: JokeEntity
         do {
             joke = apiClient.getJoke().toEntity()
             val inserted = dbClient.insertJoke(joke)
-        } while (inserted == -1L)
+        } while (inserted == -1L && retryCount-- > 0)
         return joke.toModel()
     }
 

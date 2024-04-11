@@ -4,15 +4,13 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.axondragonscale.jest.model.IJoke
+import com.axondragonscale.jest.model.BlacklistFlag
+import com.axondragonscale.jest.model.Category
+import com.axondragonscale.jest.model.JokeType
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -26,24 +24,41 @@ private val Context.appPrefs: DataStore<Preferences> by preferencesDataStore(APP
 @Singleton
 class AppPrefsRepository @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val json: Json,
 ) {
 
-    private val appPrefs = context.appPrefs
-
-    private val currentJokeKey = stringPreferencesKey("currentJoke")
-    private val currentJokeFlow: Flow<IJoke?> = appPrefs.data.map { prefs ->
-        val joke = prefs[currentJokeKey] ?: return@map null
-        json.decodeFromString<IJoke>(joke)
+    private val jokeCategoriesKey = stringSetPreferencesKey("jokeCategories")
+    val jokeCategoriesFlow = context.appPrefs.data.map { prefs ->
+        val categories = prefs[jokeCategoriesKey] ?: setOf()
+        categories.map { Category.fromOrdinal(it.toInt()) }
     }
 
-    suspend fun getCurrentJoke(): IJoke? {
-        return currentJokeFlow.firstOrNull()
+    suspend fun setJokeCategories(categories: List<Category>) {
+        context.appPrefs.edit { prefs ->
+            prefs[jokeCategoriesKey] = categories.map { it.ordinal.toString() }.toSet()
+        }
     }
 
-    suspend fun setCurrentJoke(joke: IJoke) {
-        appPrefs.edit { prefs ->
-            prefs[currentJokeKey] = json.encodeToString(joke)
+    private val jokeTypesKey = stringSetPreferencesKey("jokeTypes")
+    val jokeTypesFlow = context.appPrefs.data.map { prefs ->
+        val types = prefs[jokeTypesKey] ?: setOf()
+        types.map { JokeType.fromOrdinal(it.toInt()) }
+    }
+
+    suspend fun setJokeTypes(jokeTypes: List<JokeType>) {
+        context.appPrefs.edit { prefs ->
+            prefs[jokeTypesKey] = jokeTypes.map { it.ordinal.toString() }.toSet()
+        }
+    }
+
+    private val blacklistFlagsKey = stringSetPreferencesKey("blacklistFlags")
+    val blacklistFlagsFlow = context.appPrefs.data.map { prefs ->
+        val blacklistFlags = prefs[blacklistFlagsKey] ?: setOf()
+        blacklistFlags.map { BlacklistFlag.fromOrdinal(it.toInt()) }
+    }
+
+    suspend fun setBlacklistFlags(blacklistFlags: List<BlacklistFlag>) {
+        context.appPrefs.edit { prefs ->
+            prefs[blacklistFlagsKey] = blacklistFlags.map { it.ordinal.toString() }.toSet()
         }
     }
 }
