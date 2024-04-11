@@ -106,7 +106,7 @@ fun BottomTabBar(
 @Preview(name = "Light Mode", showBackground = true)
 @Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun BottomBarPreview(modifier: Modifier = Modifier) {
+private fun BottomBarPreview() {
     JestTheme {
         Box(
             modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.background),

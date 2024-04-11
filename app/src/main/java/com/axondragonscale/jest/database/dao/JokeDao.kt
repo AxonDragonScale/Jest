@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.axondragonscale.jest.database.entity.JokeEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * Created by Ronak Harkhani on 04/04/24
@@ -17,6 +18,12 @@ interface JokeDao {
 
     @Query("SELECT * FROM joke ORDER BY timestamp DESC LIMIT 1")
     suspend fun getCurrentJoke(): JokeEntity?
+
+    @Query("SELECT * FROM joke ORDER BY timestamp DESC")
+    fun getAllJokes(): Flow<List<JokeEntity>>
+
+    @Query("SELECT * FROM joke WHERE favorite = 1 ORDER BY timestamp DESC")
+    fun getFavoriteJokes(): Flow<List<JokeEntity>>
 
     @Query("UPDATE joke set favorite = :favorite WHERE id = :id")
     suspend fun updateFavoriteFlag(id: Int, favorite: Boolean)
