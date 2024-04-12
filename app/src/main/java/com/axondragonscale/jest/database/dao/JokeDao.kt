@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface JokeDao {
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    // Returns -1 in case of a conflict
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertJoke(joke: JokeEntity): Long
 
     @Query("SELECT * FROM joke ORDER BY timestamp DESC LIMIT 1")
