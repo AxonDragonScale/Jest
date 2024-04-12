@@ -31,10 +31,12 @@ class JokeRepository @Inject constructor(
             .firstOrNull()
             .toCommaSeparatedString()
             .ifNullOrBlank("Any")!!
+
         val jokeTypes = prefsRepository.jokeTypesFlow
             .firstOrNull()
             .toCommaSeparatedString()
             .ifNullOrBlank(null)
+
         val blacklistFlags = prefsRepository.blacklistFlagsFlow
             .firstOrNull()
             .toCommaSeparatedString()
@@ -50,6 +52,7 @@ class JokeRepository @Inject constructor(
             ).toEntity()
             val inserted = dbClient.insertJoke(joke)
         } while (inserted == -1L && retryCount-- > 0)
+
         return joke.toModel()
     }
 

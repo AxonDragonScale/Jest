@@ -1,6 +1,9 @@
 package com.axondragonscale.jest.ui.common
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.EaseInOutBack
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,7 +57,6 @@ import kotlinx.coroutines.delay
  * Created by Ronak Harkhani on 09/04/24
  */
 
-
 @Composable
 fun JokeCard(
     modifier: Modifier = Modifier,
@@ -70,6 +72,7 @@ fun JokeCard(
 ) {
     Column(
         modifier = Modifier
+            .animateContentSize(tween(500, easing = EaseInOutBack))
             .fillMaxWidth()
             .padding(16.dp),
     ) {
