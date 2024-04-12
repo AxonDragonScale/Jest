@@ -13,7 +13,7 @@ interface JokeApi {
 
     @GET("joke/{category}")
     suspend fun getJokes(
-        @Path("category") category: String? = "Any",
+        @Path("category") category: String = "Any",
         @Query("amount") amount: Int,
         @Query("lang") lang: String? = null,
         @Query("blacklistFlags") blacklistFlags: String? = null,
@@ -22,7 +22,7 @@ interface JokeApi {
 
     @GET("joke/{category}")
     suspend fun getJoke(
-        @Path("category") category: String? = "Any",
+        @Path("category") category: String = "Any",
         @Query("lang") lang: String? = null,
         @Query("blacklistFlags") blacklistFlags: String? = null,
         @Query("type") type: String? = null,
