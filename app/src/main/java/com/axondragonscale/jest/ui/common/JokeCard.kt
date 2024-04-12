@@ -3,8 +3,6 @@ package com.axondragonscale.jest.ui.common
 import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.EaseInOutBack
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,9 +10,11 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -36,6 +36,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -53,6 +54,7 @@ import com.axondragonscale.jest.model.getShareableText
 import com.axondragonscale.jest.ui.component.JestTag
 import com.axondragonscale.jest.ui.component.TypewriterText
 import com.axondragonscale.jest.ui.component.TypewriterTextVisibility
+import com.axondragonscale.jest.ui.component.shimmer
 import com.axondragonscale.jest.ui.theme.JestTheme
 import kotlinx.coroutines.delay
 
@@ -74,7 +76,7 @@ fun JokeCard(
 ) {
     Column(
         modifier = Modifier
-            .animateContentSize(tween(500, easing = EaseInOutBack))
+            .animateContentSize()
             .fillMaxWidth()
             .padding(16.dp),
     ) {
@@ -88,7 +90,9 @@ fun JokeCard(
                 onAnimationComplete = onAnimationComplete,
             )
         } else {
-            // TODO: Shimmer
+            Shimmer(modifier = Modifier.fillMaxWidth(0.9f))
+            Spacer(modifier = Modifier.height(8.dp))
+            Shimmer(modifier = Modifier.fillMaxWidth(0.9f))
         }
 
         ClosingQuote(modifier = Modifier.align(Alignment.End))
@@ -102,14 +106,13 @@ fun JokeCard(
             FavoriteButton(
                 isFavorite = joke?.favorite ?: false,
                 onFavoriteToggled = onFavoriteToggled,
+                isEnabled = joke != null,
             )
             ShareButton(joke = joke)
             Spacer(modifier = Modifier.weight(1f))
-            if (joke != null) {
-                JestTag(tag = joke.category.name)
-            } else {
-                // TODO: Shimmer
-            }
+
+            if (joke != null)  JestTag(tag = joke.category.name)
+            else Shimmer(modifier = Modifier.width(48.dp))
         }
     }
 }
@@ -164,15 +167,27 @@ private fun JokeText(
 }
 
 @Composable
+private fun Shimmer(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .height(24.dp)
+            .clip(RoundedCornerShape(35))
+            .shimmer(true, MaterialTheme.colorScheme.onPrimary)
+    )
+}
+
+@Composable
 private fun FavoriteButton(
     modifier: Modifier = Modifier,
     isFavorite: Boolean,
     onFavoriteToggled: (Boolean) -> Unit,
+    isEnabled: Boolean,
 ) {
     IconToggleButton(
         modifier = modifier,
         checked = isFavorite,
         onCheckedChange = onFavoriteToggled,
+        enabled = isEnabled,
         colors = IconButtonDefaults.iconToggleButtonColors(
             checkedContentColor = LocalContentColor.current
         ),
@@ -253,6 +268,22 @@ private fun JokeCardPreview() {
                     joke = "Lorem Ipsum"
                 ),
                 shouldAnimateJoke = true,
+                onAnimationComplete = {},
+                onFavoriteToggled = {},
+            )
+        }
+    }
+}
+
+@Preview(name = "Light Mode", showBackground = true)
+@Preview(name = "Dark Mode", showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+private fun JokeCardShimmerPreview() {
+    JestTheme {
+        Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
+            JokeCard(
+                joke = null,
+                shouldAnimateJoke = false,
                 onAnimationComplete = {},
                 onFavoriteToggled = {},
             )
