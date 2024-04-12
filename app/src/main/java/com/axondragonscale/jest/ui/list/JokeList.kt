@@ -62,7 +62,6 @@ fun JokeList(
                 shouldAnimateJoke = false,
                 onAnimationComplete = { },
                 onFavoriteToggled = { },
-                onShareClick = { }
             )
             Spacer(modifier = Modifier.height(16.dp))
         }

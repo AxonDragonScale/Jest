@@ -1,5 +1,6 @@
 package com.axondragonscale.jest.ui.common
 
+import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.EaseInOutBack
@@ -36,6 +37,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,6 +49,7 @@ import com.axondragonscale.jest.model.Language
 import com.axondragonscale.jest.model.OnePartJoke
 import com.axondragonscale.jest.model.getFirstLine
 import com.axondragonscale.jest.model.getSecondLine
+import com.axondragonscale.jest.model.getShareableText
 import com.axondragonscale.jest.ui.component.JestTag
 import com.axondragonscale.jest.ui.component.TypewriterText
 import com.axondragonscale.jest.ui.component.TypewriterTextVisibility
@@ -64,7 +67,6 @@ fun JokeCard(
     shouldAnimateJoke: Boolean,
     onAnimationComplete: () -> Unit,
     onFavoriteToggled: (Boolean) -> Unit,
-    onShareClick: () -> Unit,
 ) = Card(
     modifier = modifier,
     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary),
@@ -101,7 +103,7 @@ fun JokeCard(
                 isFavorite = joke?.favorite ?: false,
                 onFavoriteToggled = onFavoriteToggled,
             )
-            ShareButton(onShareClick = onShareClick)
+            ShareButton(joke = joke)
             Spacer(modifier = Modifier.weight(1f))
             if (joke != null) {
                 JestTag(tag = joke.category.name)
@@ -185,11 +187,21 @@ private fun FavoriteButton(
 @Composable
 private fun ShareButton(
     modifier: Modifier = Modifier,
-    onShareClick: () -> Unit,
+    joke: IJoke?,
 ) {
+    val context = LocalContext.current
     IconButton(
         modifier = modifier,
-        onClick = onShareClick,
+        enabled = joke != null,
+        onClick = {
+            val sendIntent = Intent().apply {
+                action = Intent.ACTION_SEND
+                type = "text/plain"
+                putExtra(Intent.EXTRA_TEXT, joke?.getShareableText())
+            }
+            val shareIntent = Intent.createChooser(sendIntent, null)
+            context.startActivity(shareIntent)
+        },
     ) {
         Icon(
             imageVector = Icons.Default.IosShare,
@@ -243,7 +255,6 @@ private fun JokeCardPreview() {
                 shouldAnimateJoke = true,
                 onAnimationComplete = {},
                 onFavoriteToggled = {},
-                onShareClick = {},
             )
         }
     }

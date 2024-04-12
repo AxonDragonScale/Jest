@@ -76,7 +76,6 @@ fun Home(
                         onEvent(HomeUiEvent.FavoriteToggled(joke, it))
                     }
                 },
-                onShareClick = { },
             )
         }
 

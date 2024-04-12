@@ -27,6 +27,13 @@ fun IJoke.getSecondLine() = when (this) {
     else -> null
 }
 
+fun IJoke.getShareableText() =
+""" 
+${getFirstLine()}
+${if (getSecondLine() != null) "\n${getSecondLine()}\n" else ""}
+Brought to you by Jest, Get your daily dose of humour.
+""".trimIndent()
+
 /**
  * Joke where the type is `single`
  */
@@ -40,7 +47,7 @@ data class OnePartJoke(
     override var favorite: Boolean = false,
     override val type: JokeType,
     val joke: String,
-): IJoke
+) : IJoke
 
 /**
  * Joke where type is `twopart`
@@ -56,4 +63,4 @@ data class TwoPartJoke(
     override val type: JokeType,
     val setup: String,
     val delivery: String,
-): IJoke
+) : IJoke
