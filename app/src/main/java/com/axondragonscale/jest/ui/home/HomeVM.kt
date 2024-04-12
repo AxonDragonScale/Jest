@@ -19,7 +19,6 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeVM @Inject constructor(
     private val repository: JokeRepository,
-    private val appPrefsRepository: AppPrefsRepository,
 ) : ViewModel() {
 
     val uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)

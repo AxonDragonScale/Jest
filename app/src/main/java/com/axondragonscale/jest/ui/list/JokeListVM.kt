@@ -13,17 +13,25 @@ import javax.inject.Inject
 /**
  * Created by Ronak Harkhani on 07/04/24
  */
+
 @HiltViewModel
-class JokeListVM @Inject constructor(
+class FavoritesVM @Inject constructor(
+    private val repository: JokeRepository,
+) : JokeListVM(JokeListType.Favorites, repository)
+
+@HiltViewModel
+class HistoryVM @Inject constructor(
+    private val repository: JokeRepository,
+) : JokeListVM(JokeListType.History, repository)
+
+sealed class JokeListVM(
+    private val listType: JokeListType,
     private val repository: JokeRepository,
 ) : ViewModel() {
 
-    private lateinit var listType: JokeListType
-
     val uiState = MutableStateFlow(JokeListUiState(listOf()))
 
-    fun init(listType: JokeListType) {
-        this.listType = listType
+    init {
         viewModelScope.launch(Dispatchers.IO) {
             val jokesFlow = when (listType) {
                 JokeListType.History -> repository.getAllJokes()

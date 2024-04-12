@@ -133,8 +133,12 @@ private fun JokeText(
         fontWeight = FontWeight.Bold,
         visibility = if (isTextAnimated) TypewriterTextVisibility.Animate else TypewriterTextVisibility.Static,
         onEffectComplete = {
-            delay(1000)
-            secondLineVisibility = TypewriterTextVisibility.Animate
+            if (secondLine != null) {
+                delay(1000)
+                secondLineVisibility = TypewriterTextVisibility.Animate
+            } else {
+                onAnimationComplete.invoke()
+            }
         }
     )
 

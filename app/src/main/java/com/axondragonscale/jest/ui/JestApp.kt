@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.axondragonscale.jest.ui.bottombar.BottomTabBar
 import com.axondragonscale.jest.ui.bottombar.Tab
-import com.axondragonscale.jest.ui.list.JokeList
 import com.axondragonscale.jest.ui.home.Home
-import com.axondragonscale.jest.ui.list.JokeListType
+import com.axondragonscale.jest.ui.list.Favorites
+import com.axondragonscale.jest.ui.list.History
 import kotlinx.coroutines.launch
 
 /**
@@ -38,8 +38,8 @@ fun JestApp() {
         HorizontalPager(state = pagerState) { position ->
             when (position) {
                 Tab.Home.position -> Home()
-                Tab.Favorites.position -> JokeList(listType = JokeListType.Favorites)
-                Tab.History.position -> JokeList(listType = JokeListType.History)
+                Tab.Favorites.position -> Favorites()
+                Tab.History.position -> History()
             }
         }
 
