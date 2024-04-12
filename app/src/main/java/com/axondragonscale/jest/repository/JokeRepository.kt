@@ -7,7 +7,6 @@ import com.axondragonscale.jest.model.IJoke
 import com.axondragonscale.jest.network.JokeApiClient
 import com.axondragonscale.jest.network.mapper.toEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -18,7 +17,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class JokeRepository @Inject constructor(
-    private val appPrefsRepository: AppPrefsRepository,
+    private val prefsRepository: PrefsRepository,
     private val apiClient: JokeApiClient,
     private val dbClient: JestDatabaseClient,
 ) {
@@ -28,15 +27,24 @@ class JokeRepository @Inject constructor(
     }
 
     suspend fun getNewJoke(): IJoke {
-        val categories = appPrefsRepository.jokeCategoriesFlow.firstOrNull()?.joinToString(",") { it.name }
-        val jokeTypes = appPrefsRepository.jokeTypesFlow.firstOrNull()?.joinToString(",") { it.name }
-        val blacklistFlags = appPrefsRepository.blacklistFlagsFlow.first().joinToString(",") { it.name }
+        val categories = prefsRepository.jokeCategoriesFlow
+            .firstOrNull()
+            .toCommaSeparatedString()
+            .ifNullOrBlank("Any")!!
+        val jokeTypes = prefsRepository.jokeTypesFlow
+            .firstOrNull()
+            .toCommaSeparatedString()
+            .ifNullOrBlank(null)
+        val blacklistFlags = prefsRepository.blacklistFlagsFlow
+            .firstOrNull()
+            .toCommaSeparatedString()
+            .ifNullOrBlank(null)
 
         var retryCount = 5
         var joke: JokeEntity
         do {
             joke = apiClient.getJoke(
-                category = categories ?: "Any",
+                category = categories,
                 type = jokeTypes,
                 blacklistFlags = blacklistFlags,
             ).toEntity()
@@ -60,5 +68,11 @@ class JokeRepository @Inject constructor(
     suspend fun removeFromFavorites(jokeId: Int) {
         dbClient.updateFavoriteFlag(jokeId, favorite = false)
     }
+
+    private fun <E : Enum<E>> List<Enum<E>>?.toCommaSeparatedString() =
+        this?.joinToString(",") { it.name }
+
+    private fun String?.ifNullOrBlank(default: String?) =
+        if (this.isNullOrBlank()) default else this
 
 }

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.axondragonscale.jest.model.BlacklistFlag
 import com.axondragonscale.jest.model.Category
 import com.axondragonscale.jest.model.JokeType
-import com.axondragonscale.jest.repository.AppPrefsRepository
+import com.axondragonscale.jest.repository.PrefsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -21,7 +21,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class PrefsVM @Inject constructor(
-    private val appPrefsRepository: AppPrefsRepository,
+    private val prefsRepository: PrefsRepository,
 ) : ViewModel() {
 
     val uiState: StateFlow<PrefsUiState> =
@@ -35,19 +35,19 @@ class PrefsVM @Inject constructor(
     fun onEvent(event: PrefsUiEvent) = viewModelScope.launch(Dispatchers.IO) {
         when (event) {
             is PrefsUiEvent.CategorySelectionChanged -> {
-                appPrefsRepository.setJokeCategories(
+                prefsRepository.setJokeCategories(
                     event.selectedCategories.map { Category.fromOrdinal(it) }
                 )
             }
 
             is PrefsUiEvent.JokeTypeSelectionChanged -> {
-                appPrefsRepository.setJokeTypes(
+                prefsRepository.setJokeTypes(
                     event.selectedJokeTypes.map { JokeType.fromOrdinal(it) }
                 )
             }
 
             is PrefsUiEvent.BlacklistFlagSelectionChanged -> {
-                appPrefsRepository.setBlacklistFlags(
+                prefsRepository.setBlacklistFlags(
                     event.selectedBlacklistFlags.map { BlacklistFlag.fromOrdinal(it) }
                 )
             }
@@ -56,9 +56,9 @@ class PrefsVM @Inject constructor(
 
     private fun prefsUiStateFlow(): Flow<PrefsUiState> =
         combine(
-            appPrefsRepository.jokeCategoriesFlow,
-            appPrefsRepository.jokeTypesFlow,
-            appPrefsRepository.blacklistFlagsFlow
+            prefsRepository.jokeCategoriesFlow,
+            prefsRepository.jokeTypesFlow,
+            prefsRepository.blacklistFlagsFlow
         ) { jokeCategories, jokeTypes, blacklistFlags ->
             PrefsUiState(
                 selectedCategories = jokeCategories,

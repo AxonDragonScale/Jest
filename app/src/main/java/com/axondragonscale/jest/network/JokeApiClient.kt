@@ -33,6 +33,3 @@ class JokeApiClient @Inject constructor(
     )
     .build()
     .create(JokeApi::class.java)
-{
-
-}

@@ -22,7 +22,7 @@ private const val APP_PREFS_STORE = "app_prefs"
 private val Context.appPrefs: DataStore<Preferences> by preferencesDataStore(APP_PREFS_STORE)
 
 @Singleton
-class AppPrefsRepository @Inject constructor(
+class PrefsRepository @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
 

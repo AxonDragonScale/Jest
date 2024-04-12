@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.axondragonscale.jest.model.OnePartJoke
 import com.axondragonscale.jest.model.TwoPartJoke
-import com.axondragonscale.jest.repository.AppPrefsRepository
 import com.axondragonscale.jest.repository.JokeRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
