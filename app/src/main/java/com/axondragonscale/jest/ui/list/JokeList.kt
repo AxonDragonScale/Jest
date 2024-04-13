@@ -33,19 +33,26 @@ import com.axondragonscale.jest.ui.theme.JestTheme
 @Composable
 fun Favorites(vm: FavoritesVM = hiltViewModel()) {
     val uiState by vm.uiState.collectAsStateWithLifecycle()
-    JokeList(uiState = uiState)
+    JokeList(
+        uiState = uiState,
+        onEvent = { vm.onEvent(it) },
+    )
 }
 
 @Composable
 fun History(vm: HistoryVM = hiltViewModel()) {
     val uiState by vm.uiState.collectAsStateWithLifecycle()
-    JokeList(uiState = uiState)
+    JokeList(
+        uiState = uiState,
+        onEvent = { vm.onEvent(it) },
+    )
 }
 
 @Composable
 fun JokeList(
     modifier: Modifier = Modifier,
     uiState: JokeListUiState,
+    onEvent: (JokeListUiEvent) -> Unit,
 ) {
     LazyColumn(
         modifier = modifier
@@ -61,7 +68,7 @@ fun JokeList(
                 joke = joke,
                 shouldAnimateJoke = false,
                 onAnimationComplete = { },
-                onFavoriteToggled = { },
+                onFavoriteToggled = { onEvent(JokeListUiEvent.FavoriteToggled(joke.id, it)) },
             )
             Spacer(modifier = Modifier.height(16.dp))
         }
@@ -97,7 +104,8 @@ private fun JokeListPreview() {
                             delivery = "Lorem Ipsum"
                         )
                     )
-                )
+                ),
+                onEvent = { }
             )
         }
     }

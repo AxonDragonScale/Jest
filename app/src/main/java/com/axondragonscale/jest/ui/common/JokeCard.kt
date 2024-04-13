@@ -78,7 +78,8 @@ fun JokeCard(
         modifier = Modifier
             .animateContentSize()
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp)
+            .padding(top = 8.dp),
     ) {
         OpeningQuote()
 
@@ -99,8 +100,8 @@ fun JokeCard(
 
         Row(
             modifier = Modifier
-                .padding(top = 16.dp)
-                .fillMaxWidth(),
+                .fillMaxWidth()
+                .padding(bottom = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             FavoriteButton(
@@ -111,7 +112,7 @@ fun JokeCard(
             ShareButton(joke = joke)
             Spacer(modifier = Modifier.weight(1f))
 
-            if (joke != null)  JestTag(tag = joke.category.name)
+            if (joke != null) JestTag(tag = joke.category.name)
             else Shimmer(modifier = Modifier.width(48.dp))
         }
     }

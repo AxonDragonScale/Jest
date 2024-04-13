@@ -45,8 +45,13 @@ sealed class JokeListVM(
         }
     }
 
-    fun onEvent() {
-
+    fun onEvent(event: JokeListUiEvent) = viewModelScope.launch(Dispatchers.IO) {
+        when (event) {
+            is JokeListUiEvent.FavoriteToggled -> {
+                if (event.favorite) repository.addToFavorites(event.jokeId)
+                else repository.removeFromFavorites(event.jokeId)
+            }
+        }
     }
 
 }
