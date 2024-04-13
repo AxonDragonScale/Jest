@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -43,6 +44,7 @@ import com.axondragonscale.jest.ui.theme.JestTheme
 fun Favorites(vm: FavoritesVM = hiltViewModel()) {
     val uiState by vm.uiState.collectAsStateWithLifecycle()
     JokeList(
+        listType = JokeListType.Favorites,
         uiState = uiState,
         onEvent = { vm.onEvent(it) },
     )
@@ -52,6 +54,7 @@ fun Favorites(vm: FavoritesVM = hiltViewModel()) {
 fun History(vm: HistoryVM = hiltViewModel()) {
     val uiState by vm.uiState.collectAsStateWithLifecycle()
     JokeList(
+        listType = JokeListType.History,
         uiState = uiState,
         onEvent = { vm.onEvent(it) },
     )
@@ -60,21 +63,29 @@ fun History(vm: HistoryVM = hiltViewModel()) {
 @Composable
 fun JokeList(
     modifier: Modifier = Modifier,
+    listType: JokeListType,
     uiState: JokeListUiState,
     onEvent: (JokeListUiEvent) -> Unit,
 ) {
-    if (uiState.jokes.isEmpty()) {
-        NoJokesMessage()
-        return
-    }
-    
     LazyColumn(
         modifier = modifier
             .fillMaxSize()
             .padding(horizontal = 16.dp)
     ) {
+
         item {
-            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                modifier = Modifier.padding(vertical = 32.dp),
+                text = listType.name,
+                style = MaterialTheme.typography.displayLarge,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+
+        item {
+            if (uiState.jokes.isEmpty())
+                NoJokesMessage()
         }
 
         items(uiState.jokes, key = { it.id }) { joke ->
@@ -98,7 +109,7 @@ fun JokeList(
 @Composable
 fun NoJokesMessage(modifier: Modifier = Modifier) {
     Column(
-        modifier = modifier.fillMaxSize().padding(bottom = 80.dp),
+        modifier = modifier.fillMaxWidth().height(600.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -133,6 +144,7 @@ private fun JokeListPreview() {
     JestTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
             JokeList(
+                listType = JokeListType.History,
                 uiState = JokeListUiState(
                     listOf(
                         OnePartJoke(
@@ -169,6 +181,7 @@ private fun EmptyJokeListPreview() {
     JestTheme {
         Box(modifier = Modifier.background(MaterialTheme.colorScheme.background)) {
             JokeList(
+                listType = JokeListType.Favorites,
                 uiState = JokeListUiState(listOf()),
                 onEvent = { }
             )
