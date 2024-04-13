@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -57,48 +56,46 @@ fun MultiSelector(
         style = MaterialTheme.typography.labelSmall,
         fontWeight = FontWeight.Bold,
     )
-    Row {
-        FlowRow(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            options.forEach { option ->
-                val bgColor = MaterialTheme.colorScheme.run {
-                    if (option.isSelected) primary else primaryContainer
-                }
-                val fontColor = MaterialTheme.colorScheme.run {
-                    if (option.isSelected) onPrimary else onPrimaryContainer
-                }
-                Text(
-                    modifier = Modifier
-                        .border(
-                            width = 1.dp,
-                            color = MaterialTheme.colorScheme.surfaceTint,
-                            shape = RoundedCornerShape(40)
-                        )
-                        .background(
-                            color = bgColor,
-                            shape = RoundedCornerShape(40),
-                        )
-                        .defaultMinSize(minWidth = 64.dp, minHeight = 40.dp)
-                        .padding(vertical = 8.dp, horizontal = 16.dp)
-                        .wrapContentSize()
-                        .clickable {
-                            val updatedSelection = options
-                                .filter {
-                                    if (it == option) !option.isSelected
-                                    else it.isSelected
-                                }
-                                .map { it.id }
-
-                            onSelectionChanged(updatedSelection)
-                        },
-                    text = option.displayText,
-                    style = MaterialTheme.typography.labelMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = fontColor,
-                )
+    FlowRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        options.forEach { option ->
+            val bgColor = MaterialTheme.colorScheme.run {
+                if (option.isSelected) primary else primaryContainer
             }
+            val fontColor = MaterialTheme.colorScheme.run {
+                if (option.isSelected) onPrimary else onPrimaryContainer
+            }
+            Text(
+                modifier = Modifier
+                    .border(
+                        width = 1.dp,
+                        color = MaterialTheme.colorScheme.surfaceTint,
+                        shape = RoundedCornerShape(40)
+                    )
+                    .background(
+                        color = bgColor,
+                        shape = RoundedCornerShape(40),
+                    )
+                    .defaultMinSize(minWidth = 64.dp, minHeight = 40.dp)
+                    .padding(vertical = 8.dp, horizontal = 16.dp)
+                    .wrapContentSize()
+                    .clickable {
+                        val updatedSelection = options
+                            .filter {
+                                if (it == option) !option.isSelected
+                                else it.isSelected
+                            }
+                            .map { it.id }
+
+                        onSelectionChanged(updatedSelection)
+                    },
+                text = option.displayText,
+                style = MaterialTheme.typography.labelMedium,
+                fontWeight = FontWeight.Bold,
+                color = fontColor,
+            )
         }
     }
 }
@@ -110,26 +107,35 @@ private fun PrefsBottomSheetPreview() {
     JestTheme {
         Column(
             modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background)
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             MultiSelector(
                 label = "CATEGORY",
-                options = createMultiSelectorOptions(Category.entries, Category.entries.take(3)),
+                options = createMultiSelectorOptions(
+                    Category.entries,
+                    Category.entries.take(3)
+                ),
                 onSelectionChanged = {},
             )
 
             MultiSelector(
                 modifier = Modifier.padding(top = 16.dp),
                 label = "JOKE TYPE",
-                options = createMultiSelectorOptions(JokeType.entries, JokeType.entries.take(1)),
+                options = createMultiSelectorOptions(
+                    JokeType.entries,
+                    JokeType.entries.take(1)
+                ),
                 onSelectionChanged = {},
             )
 
             MultiSelector(
                 modifier = Modifier.padding(top = 16.dp),
                 label = "BLACKLIST",
-                options = createMultiSelectorOptions(BlacklistFlag.entries, BlacklistFlag.entries.take(3)),
+                options = createMultiSelectorOptions(
+                    BlacklistFlag.entries,
+                    BlacklistFlag.entries.take(3)
+                ),
                 onSelectionChanged = {},
             )
         }

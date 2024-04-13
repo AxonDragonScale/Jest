@@ -43,8 +43,6 @@ fun JestApp() {
             }
         }
 
-        pagerState.currentPage
-
         BottomTabBar(
             modifier = Modifier
                 .padding(horizontal = 56.dp, vertical = 16.dp)

@@ -17,7 +17,7 @@ import com.axondragonscale.jest.model.Language
     tableName = "joke",
     indices = [
         Index("timestamp", unique = true, orders = [Order.DESC]),
-        Index("favorite")
+        Index("favorite", "timestamp", unique = true, orders = [Order.DESC, Order.DESC])
     ],
 )
 data class JokeEntity(
