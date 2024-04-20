@@ -265,6 +265,7 @@ private fun JokeCardPreview() {
                     flags = Flags(false, false, false, false, false, false),
                     safe = true,
                     favorite = false,
+                    timestamp = 1,
                     type = JokeType.Single,
                     joke = "Lorem Ipsum"
                 ),

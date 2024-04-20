@@ -4,6 +4,7 @@ import com.axondragonscale.jest.database.JestDatabaseClient
 import com.axondragonscale.jest.database.entity.JokeEntity
 import com.axondragonscale.jest.database.mapper.toModel
 import com.axondragonscale.jest.model.IJoke
+import com.axondragonscale.jest.model.isOld
 import com.axondragonscale.jest.network.JokeApiClient
 import com.axondragonscale.jest.network.mapper.toEntity
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +24,10 @@ class JokeRepository @Inject constructor(
 ) {
 
     suspend fun getCurrentJoke(): IJoke {
-        return dbClient.getCurrentJoke()?.toModel() ?: getNewJoke()
+        var joke = dbClient.getCurrentJoke()?.toModel()
+        if (joke == null || joke.isOld())
+            joke = getNewJoke()
+        return joke
     }
 
     suspend fun getNewJoke(): IJoke {

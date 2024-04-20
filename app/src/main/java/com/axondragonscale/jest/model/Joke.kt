@@ -2,6 +2,7 @@ package com.axondragonscale.jest.model
 
 import com.axondragonscale.jest.model.serialization.JokeSerializer
 import kotlinx.serialization.Serializable
+import kotlin.time.Duration.Companion.days
 
 /**
  * Created by Ronak Harkhani on 02/04/24
@@ -15,6 +16,7 @@ sealed interface IJoke {
     val flags: Flags
     val safe: Boolean
     var favorite: Boolean
+    val timestamp: Long
 }
 
 fun IJoke.getFirstLine() = when (this) {
@@ -34,6 +36,9 @@ ${if (getSecondLine() != null) "\n${getSecondLine()}\n" else ""}
 Brought to you by Jest, Get your daily dose of humour.
 """.trimIndent()
 
+fun IJoke.isOld() =
+    timestamp < (System.currentTimeMillis() - 1.days.inWholeMilliseconds)
+
 /**
  * Joke where the type is `single`
  */
@@ -45,6 +50,7 @@ data class OnePartJoke(
     override val flags: Flags,
     override val safe: Boolean,
     override var favorite: Boolean = false,
+    override val timestamp: Long,
     override val type: JokeType,
     val joke: String,
 ) : IJoke
@@ -60,6 +66,7 @@ data class TwoPartJoke(
     override val safe: Boolean,
     override val flags: Flags,
     override var favorite: Boolean = false,
+    override val timestamp: Long,
     override val type: JokeType,
     val setup: String,
     val delivery: String,

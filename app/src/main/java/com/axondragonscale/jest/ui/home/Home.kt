@@ -144,6 +144,7 @@ private fun HomePreview() {
                         category = Category.Pun,
                         flags = Flags(false, false, false, false, false, false),
                         safe = true,
+                        timestamp = 1,
                         type = JokeType.Single,
                         joke = "Lorem Ipsum"
                     )

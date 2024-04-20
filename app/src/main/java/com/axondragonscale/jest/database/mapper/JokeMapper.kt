@@ -18,6 +18,7 @@ fun JokeEntity.toModel(): IJoke = when (type) {
         flags = flags,
         safe = safe,
         favorite = favorite,
+        timestamp = timestamp,
         type = type,
         joke = joke!!,
     )
@@ -28,22 +29,9 @@ fun JokeEntity.toModel(): IJoke = when (type) {
         flags = flags,
         safe = safe,
         favorite = favorite,
+        timestamp = timestamp,
         type = type,
         setup = setup!!,
         delivery = delivery!!,
     )
 }
-
-fun IJoke.toEntity(): JokeEntity = JokeEntity(
-    id = id,
-    timestamp = System.currentTimeMillis(),
-    lang = lang,
-    category = category,
-    flags = flags,
-    safe = safe,
-    favorite = favorite,
-    type = type,
-    joke = (this as? OnePartJoke)?.joke,
-    setup = (this as? TwoPartJoke)?.setup,
-    delivery = (this as? TwoPartJoke)?.delivery,
-)

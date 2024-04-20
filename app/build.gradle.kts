@@ -96,6 +96,8 @@ dependencies {
     implementation(libs.bundles.retrofit)
     implementation(libs.kotlinx.serialization)
 
+    implementation(libs.bundles.glance)
+
     debugImplementation(libs.chucker)
     releaseImplementation(libs.chucker.noop)
 }
