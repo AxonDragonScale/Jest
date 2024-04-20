@@ -1,6 +1,5 @@
 package com.axondragonscale.jest.ui.common
 
-import android.content.Intent
 import android.content.res.Configuration
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
@@ -50,7 +49,7 @@ import com.axondragonscale.jest.model.Language
 import com.axondragonscale.jest.model.OnePartJoke
 import com.axondragonscale.jest.model.getFirstLine
 import com.axondragonscale.jest.model.getSecondLine
-import com.axondragonscale.jest.model.getShareableText
+import com.axondragonscale.jest.model.getShareIntent
 import com.axondragonscale.jest.ui.component.JestTag
 import com.axondragonscale.jest.ui.component.TypewriterText
 import com.axondragonscale.jest.ui.component.TypewriterTextVisibility
@@ -210,13 +209,8 @@ private fun ShareButton(
         modifier = modifier,
         enabled = joke != null,
         onClick = {
-            val sendIntent = Intent().apply {
-                action = Intent.ACTION_SEND
-                type = "text/plain"
-                putExtra(Intent.EXTRA_TEXT, joke?.getShareableText())
-            }
-            val shareIntent = Intent.createChooser(sendIntent, null)
-            context.startActivity(shareIntent)
+            if (joke != null)
+                context.startActivity(joke.getShareIntent())
         },
     ) {
         Icon(

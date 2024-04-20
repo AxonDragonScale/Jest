@@ -45,7 +45,6 @@ class FavoriteAction: ActionCallback {
 
 }
 
-
 class ShuffleAction: ActionCallback {
 
     override suspend fun onAction(

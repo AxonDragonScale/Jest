@@ -1,5 +1,6 @@
 package com.axondragonscale.jest.model
 
+import android.content.Intent
 import com.axondragonscale.jest.model.serialization.JokeSerializer
 import kotlinx.serialization.Serializable
 import kotlin.time.Duration.Companion.days
@@ -29,12 +30,21 @@ fun IJoke.getSecondLine() = when (this) {
     else -> null
 }
 
-fun IJoke.getShareableText() =
-""" 
-${getFirstLine()}
-${if (getSecondLine() != null) "\n${getSecondLine()}\n" else ""}
-Brought to you by Jest, Get your daily dose of humour.
-""".trimIndent()
+private fun IJoke.getShareableText() =
+    """ 
+    ${getFirstLine()}
+    ${if (getSecondLine() != null) "\n${getSecondLine()}\n" else ""}
+    Brought to you by Jest, Get your daily dose of humour.
+    """.trimIndent()
+
+fun IJoke.getShareIntent(): Intent = Intent.createChooser(
+    Intent().apply {
+        action = Intent.ACTION_SEND
+        type = "text/plain"
+        putExtra(Intent.EXTRA_TEXT, getShareableText())
+    },
+    null
+)
 
 fun IJoke.isOld() =
     timestamp < (System.currentTimeMillis() - 1.days.inWholeMilliseconds)

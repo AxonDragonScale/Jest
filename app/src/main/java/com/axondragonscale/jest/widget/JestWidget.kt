@@ -10,6 +10,7 @@ import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
 import androidx.glance.action.actionParametersOf
+import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.cornerRadius
@@ -22,11 +23,13 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
+import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
+import com.axondragonscale.jest.JestActivity
 import com.axondragonscale.jest.R
 import com.axondragonscale.jest.model.IJoke
 import com.axondragonscale.jest.model.getFirstLine
@@ -41,8 +44,9 @@ fun JestWidget(joke: IJoke) {
     Column(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(GlanceTheme.colors.background)
-            .padding(12.dp),
+            .background(GlanceTheme.colors.primary)
+            .padding(12.dp)
+            .clickable(actionStartActivity(JestActivity::class.java)),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Spacer(modifier = GlanceModifier.defaultWeight())
@@ -64,7 +68,6 @@ fun JestWidget(joke: IJoke) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             FavoriteButton(joke = joke)
-            ShareButton()
             ShuffleButton()
             Spacer(modifier = GlanceModifier.defaultWeight())
             WidgetTag(text = joke.category.name)
@@ -81,7 +84,7 @@ private fun WidgetText(
         modifier = modifier,
         text = text,
         style = TextStyle(
-            color = GlanceTheme.colors.primary,
+            color = GlanceTheme.colors.onPrimary,
             fontSize = 22.sp,
             fontWeight = FontWeight.Bold,
         )
@@ -92,7 +95,7 @@ private fun WidgetText(
 @Composable
 private fun OpeningQuote(modifier: GlanceModifier = GlanceModifier) {
     WidgetIcon(
-        modifier = modifier.padding(bottom = 8.dp).size(32.dp),
+        modifier = modifier.size(32.dp),
         resId = R.drawable.ic_opening_quote,
     )
 }
@@ -104,9 +107,10 @@ private fun ClosingQuote(modifier: GlanceModifier = GlanceModifier) {
         horizontalAlignment = Alignment.End,
     ) {
         WidgetIcon(
-            modifier = modifier.padding(top = 4.dp).size(20.dp),
+            modifier = modifier.size(20.dp),
             resId = R.drawable.ic_closing_quote,
         )
+        Spacer(modifier = GlanceModifier.width(4.dp))
     }
 }
 
@@ -118,7 +122,7 @@ private fun FavoriteButton(
     WidgetIcon(
         modifier = modifier
             .cornerRadius(24.dp)
-            .padding(8.dp)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
             .clickable(actionRunCallback<FavoriteAction>(
                 actionParametersOf(
                     FavoriteAction.jokeIdKey to joke.id,
@@ -130,22 +134,11 @@ private fun FavoriteButton(
 }
 
 @Composable
-private fun ShareButton(modifier: GlanceModifier = GlanceModifier) {
-    WidgetIcon(
-        modifier = modifier
-            .cornerRadius(24.dp)
-            .padding(8.dp)
-            .clickable(actionRunCallback<ShuffleAction>()),
-        resId = R.drawable.ic_share,
-    )
-}
-
-@Composable
 private fun ShuffleButton(modifier: GlanceModifier = GlanceModifier) {
     WidgetIcon(
         modifier = modifier
             .cornerRadius(24.dp)
-            .padding(8.dp)
+            .padding(horizontal = 12.dp, vertical = 4.dp)
             .clickable(actionRunCallback<ShuffleAction>()),
         resId = R.drawable.ic_shuffle,
     )
@@ -158,12 +151,12 @@ private fun WidgetTag(
 ) {
     Text(
         modifier = modifier
-            .background(GlanceTheme.colors.primary)
+            .background(GlanceTheme.colors.onPrimary)
             .cornerRadius(8.dp)
             .padding(horizontal = 12.dp, vertical = 4.dp),
         text = text.uppercase(),
         style = TextStyle(
-            color = GlanceTheme.colors.background,
+            color = GlanceTheme.colors.primary,
             fontSize = 12.sp,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center,
@@ -175,7 +168,7 @@ private fun WidgetTag(
 private fun WidgetIcon(
     modifier: GlanceModifier = GlanceModifier,
     @DrawableRes resId: Int,
-    tintColor: ColorProvider = GlanceTheme.colors.primary,
+    tintColor: ColorProvider = GlanceTheme.colors.onPrimary,
 ) {
     Image(
         modifier = modifier,

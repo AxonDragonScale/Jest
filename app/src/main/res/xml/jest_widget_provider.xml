@@ -6,7 +6,9 @@
     android:resizeMode="horizontal|vertical"
     android:initialLayout="@layout/glance_default_loading_layout"
     android:minHeight="100dp"
-    android:minWidth="200dp"
-    android:targetCellHeight="3"
-    android:targetCellWidth="5"
-    />
+    android:minResizeHeight="100dp"
+    android:maxResizeHeight="200dp"
+    android:minWidth="400dp"
+    android:minResizeWidth="200dp"
+    android:targetCellHeight="2"
+    android:targetCellWidth="5" />
