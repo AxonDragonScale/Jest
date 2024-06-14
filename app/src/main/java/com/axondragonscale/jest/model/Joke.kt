@@ -34,7 +34,7 @@ private fun IJoke.getShareableText() =
     """ 
     ${getFirstLine()}
     ${if (getSecondLine() != null) "\n${getSecondLine()}\n" else ""}
-    Brought to you by Jest, Get your daily dose of humour.
+    - Brought to you by Jest, Get your daily dose of humour.
     """.trimIndent()
 
 fun IJoke.getShareIntent(): Intent = Intent.createChooser(
