@@ -1,5 +1,7 @@
 package com.axondragonscale.jest.repository
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.axondragonscale.jest.database.JestDatabaseClient
 import com.axondragonscale.jest.database.entity.JokeEntity
 import com.axondragonscale.jest.database.mapper.toModel
@@ -62,6 +64,18 @@ class JokeRepository @Inject constructor(
 
     fun getAllJokes(): Flow<List<IJoke>> {
         return dbClient.getAllJokes().map { it.map { it.toModel() } }
+    }
+
+    fun getAllJokesPagingSource(): Pager<Int, JokeEntity> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 10,
+                prefetchDistance = 4,
+            ),
+            pagingSourceFactory = {
+                dbClient.getAllJokesPagingSource()
+            }
+        )
     }
 
     fun getFavoriteJokes(): Flow<List<IJoke>> {

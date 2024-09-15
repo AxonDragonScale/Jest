@@ -16,12 +16,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FavoritesVM @Inject constructor(
-    private val repository: JokeRepository,
+    repository: JokeRepository,
 ) : JokeListVM(JokeListType.Favorites, repository)
 
 @HiltViewModel
 class HistoryVM @Inject constructor(
-    private val repository: JokeRepository,
+    repository: JokeRepository,
 ) : JokeListVM(JokeListType.History, repository)
 
 sealed class JokeListVM(
@@ -39,6 +39,7 @@ sealed class JokeListVM(
             }
             jokesFlow.collect { jokes ->
                 uiState.update {
+                    JokeListUiState(jokes, paginatedJokes = null)
                     JokeListUiState(jokes)
                 }
             }

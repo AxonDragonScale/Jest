@@ -78,6 +78,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.datastore.prefs)
 
+    implementation(libs.bundles.paging)
     implementation(libs.bundles.lifecycle)
 
     implementation(platform(libs.compose.bom))

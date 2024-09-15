@@ -1,5 +1,6 @@
 package com.axondragonscale.jest.database.dao
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -23,8 +24,14 @@ interface JokeDao {
     @Query("SELECT * FROM joke ORDER BY timestamp DESC")
     fun getAllJokes(): Flow<List<JokeEntity>>
 
+    @Query("SELECT * FROM joke ORDER BY timestamp DESC")
+    fun getAllJokesPagingSource(): PagingSource<Int, JokeEntity>
+
     @Query("SELECT * FROM joke WHERE favorite = 1 ORDER BY timestamp DESC")
     fun getFavoriteJokes(): Flow<List<JokeEntity>>
+
+    @Query("SELECT * FROM joke WHERE favorite = 1 ORDER BY timestamp DESC")
+    fun getFavoriteJokesPagingSource(): PagingSource<Int, JokeEntity>
 
     @Query("UPDATE joke set favorite = :favorite WHERE id = :id")
     suspend fun updateFavoriteFlag(id: Int, favorite: Boolean)
